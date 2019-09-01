@@ -1,0 +1,197 @@
+<div class="cr_right_sub ">
+  <ul class="nav nav-tabs nav__buy_sell_menu">
+    <li class="active"><a data-toggle="tab" href="#market">Market</a></li>
+    <li><a data-toggle="tab" href="#limit">Stop-Limit</a></li>
+  </ul>
+  <div class="tab-content nav__buy_sell order__table_scroll">
+    <div id="market" class="tab-pane fade in active market-info">
+      <app-loader [IsLoading]="isBuyLoading"></app-loader>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="row border-bottom xs-mb-10">
+            <div class="col-md-4 col-xs-6 animated fadeIn">
+              <div class="buy-label">
+                Buy {{ exchange.MainCurrency }}
+                <div class="cr__line">
+                  <div></div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-8 col-xs-6 text-right animated fadeIn" *ngIf="exchange.BaseValue!=null">
+              <div class="balance-label">{{ exchange.BaseCurrency }} Balance :
+                <span class="balance-count p-cursor" (click)="BuyBaseValueClick()">{{ exchange.BaseValue |
+                  appDynamicDigit:
+                  8 }}
+                </span>
+              </div>
+            </div>
+          </div>
+          <form novalidate [formGroup]="buyForm" (ngSubmit)="Buy(buyForm.value,buyForm.valid)">
+            <div class="row animated flipInX">
+              <div class="col-md-4">
+                <label>Price</label>
+              </div>
+              <div class="col-md-8">
+                <div class="input-group" [ngClass]="{'has-error': isBuySubmitted && buyForm.get('Price').hasError('required')}">
+                  <input type="text" class="form-control" formControlName="Price" placeholder="Enter Price" [(ngModel)]="exchange.BuyPrice"
+                    (keyup)="SetBuytotal('price')" appEightDigit />
+                  <div class="input-group-addon">{{ exchange.BaseCurrency }}</div>
+                </div>
+              </div>
+            </div>
+            <div class="row animated flipInX">
+              <div class="col-md-4">
+                <label>Amount</label>
+              </div>
+              <div class="col-md-8">
+                <div class="input-group" [ngClass]="{'has-error': isBuySubmitted && buyForm.get('Amount').hasError('required')}">
+                  <input type="text" class="form-control" formControlName="Amount" placeholder="Enter Amount" (keyup)="SetBuytotal('amount')"
+                    [(ngModel)]="exchange.BuyAmount" appEightDigit />
+                  <div class="input-group-addon">{{ exchange.MainCurrency }}</div>
+                </div>
+              </div>
+            </div>
+            <div class="row animated flipInX">
+              <div class="col-md-4">
+                <label>Total</label>
+              </div>
+              <div class="col-md-8">
+                <div class="input-group">
+                  <input type="text" formControlName="Total" class="form-control" [(ngModel)]="exchange.BuyTotalFees"
+                    (keyup)="SetBuytotal('total')" appEightDigit />
+                  <div class="input-group-addon">{{ exchange.BaseCurrency }}</div>
+                  <span class="cl-spn" *ngIf="isBuySubmitted && buyForm.get('Total').hasError('rangeValidation')">
+                    You
+                    have only {{ exchange.BaseValue }} {{ exchange.BaseCurrency }} </span>
+                  <span class="error-msg" *ngIf="isBuySubmitted  && buyForm.get('Total').hasError('minimumValidation')">Minimum
+                    {{ exchange.BuyMinimum }} {{ exchange.BaseCurrency }} for Buy Trade</span>
+                </div>
+              </div>
+            </div>
+            <div class="row animated flipInX">
+              <div class="col-md-12 text-right coin-condition">
+                <span class="total-fee">Min. Trade: {{ exchange.BuyMinimum | appDynamicDigit: 8 }} {{ exchange.BaseCurrency }}</span>
+                <br />
+                <span class="total-fee">Trade Fee: {{ exchange.BuyFees }}%</span>
+              </div>
+            </div>
+            <div class="row animated flipInX">
+              <div class="col-md-12">
+                <button type="submit" class="cr__buy" style="text-transform: uppercase">
+                  <span>Buy {{ exchange.MainCurrency }}</span>
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="col-md-12 animated fadeIn" style="animation-delay: 1s;">
+          <hr>
+        </div>
+        <form novalidate [formGroup]="sellForm" (ngSubmit)="Sell(sellForm.value,sellForm.valid)">
+          <div class="col-md-12">
+            <div class="row border-bottom xs-mb-10">
+              <div class="col-md-4 col-xs-6 animated fadeIn">
+                <div class="sell-label">
+                  Sell {{exchange.MainCurrency}}
+                  <div class="cr__line">
+                    <div></div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-8 col-xs-6 text-right animated fadeIn" *ngIf="exchange.MainValue!=null">
+                <div class="balance-label">{{exchange.MainCurrency}} Balance :
+                  <span class="balance-count p-cursor" (click)="SellBaseValueClick()">{{ exchange.MainValue |
+                    appDynamicDigit:
+                    8 }}</span>
+                </div>
+              </div>
+            </div>
+            <div class="row animated flipInX">
+              <div class="col-md-4">
+                <label>Price</label>
+              </div>
+              <div class="col-md-8">
+                <div class="input-group" [ngClass]="{'has-error': isSellSubmitted && sellForm.get('Price').hasError('required')}">
+                  <input type="text" formControlName="Price" placeholder="Enter Price" (keyup)="SetSelltotal('PRICE')"
+                    [(ngModel)]="exchange.SellPrice" placeholder="Enter Price" appEightDigit class="form-control" />
+                  <div class="input-group-addon">{{exchange.BaseCurrency}}</div>
+                </div>
+              </div>
+            </div>
+            <div class="row animated flipInX">
+              <div class="col-md-4">
+                <label>Amount</label>
+              </div>
+              <div class="col-md-8">
+                <div class="input-group" [ngClass]="{'has-error': isSellSubmitted && sellForm.get('Amount').hasError('required')}">
+                  <input type="text" formControlName="Amount" placeholder="Enter Amount" (keyup)="SetSelltotal('AMOUNT')"
+                    [(ngModel)]="exchange.SellAmount" placeholder="Enter Amount" appEightDigit class="form-control" />
+                  <div class="input-group-addon">{{exchange.MainCurrency}}</div>
+                </div>
+              </div>
+            </div>
+            <div class="row animated flipInX">
+              <div class="col-md-4">
+                <label>Total</label>
+              </div>
+              <div class="col-md-8">
+                <div class="input-group">
+                  <input type="text" formControlName="Total" placeholder="Enter Amount" (keyup)="SetSelltotal('TOTAL')"
+                    [(ngModel)]="exchange.SellTotal" placeholder="0.000000000" appEightDigit class="form-control" />
+                  <div class="input-group-addon">{{exchange.BaseCurrency}}</div>
+                  <span class="cl-spn" *ngIf="isSellSubmitted && sellForm.get('Total').hasError('rangeValidation')">
+                    You
+                    have only {{ exchange.MainValue }} {{ exchange.MainCurrency }} </span>
+                  <span class="error-msg" *ngIf="isSellSubmitted  && sellForm.get('Total').hasError('minimumValidation')">Minimum
+                    {{ exchange.SellMinimum }} {{ exchange.MainCurrency }} for Buy Trade</span>
+                </div>
+              </div>
+            </div>
+            <div class="row animated flipInX">
+              <div class="col-md-12 text-right coin-condition">
+                <span class="total-fee">Min. Trade: {{ exchange.SellMinimum | appDynamicDigit: 8 }} {{
+                  exchange.MainCurrency
+                  }}
+                </span>
+                <br />
+                <span class="total-fee">Trade Fee: {{ exchange.SellFees }}%</span>
+              </div>
+            </div>
+            <div class="row animated flipInX">
+              <div class="col-md-12">
+                <button type="submit" class="cr__sell" style="text-transform: uppercase">
+                  <span>Sell</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div id="limit" class="tab-pane fade ">
+      <app-stoplimit [pairId]="pairId" [dBtnTrade]="dBtnTrade" [baseCurrency]="baseCurrency" [mainCurrency]="mainCurrency"></app-stoplimit>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade modal-order" bsModal #modal="bs-modal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel"
+  [config]="{ backdrop: 'static' }" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="bs-modal" (click)="ClosePopUp()">&times;</button>
+        <h4 class="modal-title pull-left">Order Details</h4>
+      </div>
+      <div class="modal-body xs-p-30" *ngIf="isOpen">
+        <div class="row">
+          <div class="col-md-12">
+            <div [innerHTML]="buysellmsg"></div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-info" data-dismiss="bs-modal" (click)="ClosePopUp()">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

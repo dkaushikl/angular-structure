@@ -1,0 +1,89 @@
+<div class="cr__order">
+  <div class="row">
+    <div class="col-md-6 col-sm-6 md-pr-0 animated fadeIn">
+      <div class="cr__panel">
+        <div class="row">
+          <div class="col-md-6 col-xs-6">
+            <div class="buy-label">Sell ORDERS
+              <div class="cr__line">
+                <div></div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 col-xs-6 text-right">
+            <div class="balance-label" *ngIf="totalSell">Total:
+              <span class="balance-count"> {{ totalSell | appDynamicDigit: 8 }}</span> {{ mainCurrency }}
+            </div>
+          </div>
+        </div>
+        <div class="table-responsive cr__table no-effect ps" [perfectScrollbar]="config" style="position: relative;height: 30vh">
+          <app-loader [IsLoading]="loading"></app-loader>
+          <table class="table order ps">
+            <thead>
+              <tr class="table-head">
+                <th class="text-left">Price <span>({{ baseCurrency }})</span> </th>
+                <th class="text-center">Amount <span>({{ mainCurrency }})</span></th>
+                <th class="text-center">Value <span>({{ baseCurrency }})</span></th>
+                <th class="text-right">Total <span> ({{ baseCurrency }})</span> </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of sellData" class="cr_danger">
+                <td> {{ item.Price | appDynamicDigit: 8 }} </td>
+                <td> {{ item.Amount | appDynamicDigit: 8 }} </td>
+                <td class="text-right"> {{ item.Total | appDynamicDigit: 8 }} </td>
+                <td class="text-right"> {{ item.GrandTotal | appDynamicDigit: 8 }} </td>
+              </tr>
+              <tr *ngIf="sellData?.length == 0">
+                <td colspan="4"> No data found</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6 col-sm-6 md-pl-10 animated fadeIn">
+      <div class="cr__panel">
+        <div class="row">
+          <div class="col-md-6 col-xs-6">
+            <div class="buy-label">BUY ORDER
+              <div class="cr__line">
+                <div></div>
+
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 col-xs-6 text-right">
+            <div class="balance-label" *ngIf="totalBuy">Total:
+              <span class="balance-count"> {{ totalBuy | appDynamicDigit: 8 }}</span> {{ baseCurrency }}
+            </div>
+          </div>
+        </div>
+        <div class="table-responsive cr__table no-effect ps" [perfectScrollbar]="config" style="position: relative;height: 30vh">
+          <app-loader [IsLoading]="loading"></app-loader>
+          <table class="table order">
+            <thead>
+              <tr class="table-head">
+                <th class="text-left">Price <span>({{ baseCurrency }})</span> </th>
+                <th class="text-center">Amount <span>({{ mainCurrency }})</span></th>
+                <th class="text-center">Value <span>({{ baseCurrency }})</span></th>
+                <th class="text-right">Total <span> ({{ baseCurrency }})</span> </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="cr_success" *ngFor="let item of buyData">
+                <td> {{ item.Price | appDynamicDigit: 8 }} </td>
+                <td> {{ item.Amount | appDynamicDigit: 8 }} </td>
+                <td class="text-right"> {{ item.Total | appDynamicDigit: 8 }} </td>
+                <td class="text-right"> {{ item.GrandTotal | appDynamicDigit: 8 }} </td>
+              </tr>
+              <tr *ngIf="buyData?.length == 0">
+                <td colspan="4"> No data found</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

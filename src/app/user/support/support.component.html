@@ -1,0 +1,172 @@
+<div class="row">
+  <div class="col-md-3">
+    <div class="buy-label">Support Ticket
+      <div class="cr__line">
+        <div></div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-9 text-right">
+    <div class="data-filter">
+      <div class="data-filter-widget">
+        <button type="button" class="btn btn-sm btn-link animated fadeInUp" (click)="GenerateTicket()">
+          <i class="fa fa-plus  xs-pr-5"></i> Add Ticket </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="data-box support-scroll-container ps">
+      <app-loader [IsLoading]="loading"></app-loader>
+      <table class="table  cr__table order__table_scroll">
+        <thead>
+          <tr class="table-head">
+            <th>Status</th>
+            <th>Subject</th>
+            <th>Title</th>
+            <th>Message</th>
+            <th>Reply</th>
+            <th>OnDate</th>
+            <th>Add Reply</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of supportTicket">
+            <td>
+              <span class="label" [ngClass]="{'label-success': item.Status == 2, 'label-warning': item.Status == 1 }">
+                {{ item.Status == 1 ? 'PENDING' : (item.Status == 2 ? 'CONFIRM' : '')}}
+              </span>
+            </td>
+            <td> {{ item.Subject }} </td>
+            <td> {{ item.Title }} </td>
+            <td> {{ item.Message }} </td>
+            <td> {{ item.Reply }} </td>
+            <td> {{ item.OnDate | appDateFormat }} </td>
+            <td>
+              <a class="btn btn-sm btn-primary" href="javascript:void(0)" (click)="AddReply(item)" *ngIf="item.SendBy == 'Admin' && item.Status == 1">
+                <i class="fa fa-reply"></i> Reply</a>
+            </td>
+          </tr>
+          <tr *ngIf="supportTicket?.length == 0">
+            <td></td>
+            <td colspan="6" class="text-center"> No data found</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+
+<div class="modal fade support-modal" bsModal #modal="bs-modal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel"
+  [config]="{ backdrop: 'static' }" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close close-bt" data-dismiss="bs-modal" (click)="ClosePopUp()">&times;</button>
+        <h4 class="modal-title pull-left">Generate new support request</h4>
+      </div>
+      <div class="modal-body" *ngIf="IsOpen">
+        <div class="row">
+          <div class="col-md-12 ">
+            <form class="model-form" novalidate [formGroup]="supportForm" (ngSubmit)="SaveSupportTicket(supportForm.value,supportForm.valid)">
+              <div class="form-group" [ngClass]="{'has-error':!supportForm.get('Subject').valid && supportForm.get('Subject').dirty}">
+                <select class="form-control" formControlName="Subject">
+                  <option value="">-- Select Validity --</option>
+                  <option value="Account hacked">Account hacked</option>
+                  <option value="Facing issue in Withdrawal
+                          ">Facing issue in Withdrawal
+                  </option>
+                  <option value="Hashcoin Wallet Issue
+                          ">Hashcoin Wallet Issue
+                  </option>
+                  <option value="General Query
+                          ">General Query
+                  </option>
+                  <option value="Lost Google Authenticator Code
+                          ">Lost Google Authenticator
+                    Code
+                  </option>
+                  <option value="Account Suspended
+                          ">Account Suspended
+                  </option>
+                  <option value="Facing Error Between the process
+                          ">Facing Error Between the
+                    process
+                  </option>
+                  <option value="Facing issue in Withdrawal
+                          ">Facing issue in Withdrawal
+                  </option>
+                  <option value="BUY SELL Trades Incorrect
+                          ">BUY SELL Trades Incorrect
+                  </option>
+                  <option value="Profile Change Issue
+                          ">Profile Change Issue
+                  </option>
+                  <option value="Facing issue in Deposit">Facing issue in Deposit</option>
+                </select>
+                <span class="error-msg" *ngIf="isSupportFormSubmitted && !(supportForm.controls.Subject.valid)">
+                  Subject
+                  is required. </span>
+              </div>
+              <div class="form-group" [ngClass]="{'has-error':!supportForm.get('Title').valid && supportForm.get('Title').dirty}">
+                <input class="form-control" type="text" name="Title" id="Title" placeholder="Enter Title"
+                  formControlName="Title">
+                <span class="error-msg" *ngIf="isSupportFormSubmitted && !(supportForm.controls.Title.valid)"> Title is
+                  required.
+                </span>
+              </div>
+              <div class="form-group" [ngClass]="{'has-error':!supportForm.get('Message').valid && supportForm.get('Message').dirty}">
+                <textarea class="form-control" rows="5" id="comment" name="Message" id="Message" placeholder="Enter Message"
+                  formControlName="Message"></textarea>
+                <span class="error-msg" *ngIf="isSupportFormSubmitted && !(supportForm.controls.Message.valid)">
+                  Message
+                  is required. </span>
+              </div>
+              <div class="row">
+                <div class="col-md-12 text-center">
+                  <button type="submit" [ladda]="loading" class="btn btn-sm btn-success f-m-submit">Submit Request</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade support-modal" bsModal #replyModal="bs-modal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel"
+  [config]="{ backdrop: 'static' }" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close close-bt" data-dismiss="bs-modal" (click)="CloseReplyPopUp()">&times;</button>
+        <h4 class="modal-title pull-left">Add Reply</h4>
+      </div>
+      <div class="modal-body xs-p-30">
+        <div class="row">
+          <div class="col-md-12 ">
+            <form class="model-form" novalidate [formGroup]="replyForm" (ngSubmit)="ReplyTicket(replyForm.value, replyForm.valid)">
+              <div class="form-group" [ngClass]="{'has-error':!replyForm.get('Message').valid && replyForm.get('Message').dirty}">
+                <textarea class="form-control" rows="5" name="Message" id="Message" placeholder="Enter Message"
+                  formControlName="Message"></textarea>
+                <span class="error-msg" *ngIf="isReplyFormSubmitted && !(replyForm.controls.Message.valid)"> Message is
+                  required.
+                </span>
+              </div>
+              <div class="row">
+                <div class="col-md-12 text-center">
+                  <button type="submit" [ladda]="replyLoading" class="btn btn-sm btn-success f-m-submit">Send Reply</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

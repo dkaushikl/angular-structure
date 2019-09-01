@@ -1,0 +1,188 @@
+<div class="row">
+  <div class="col-md-3">
+    <div class="buy-label">Deposit & Withdraw Balance
+      <div class="cr__line">
+        <div></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <div class="user-balance">
+      <div class="row xs-mt-10 ">
+        <div class="col-md-2 xs-pr-0">
+          <ul class="nav user-balance-tab nav-pills nav-stacked">
+            <li [ngClass]="{'active': tabActive === 'Overview' }">
+              <a href="javascript:void(0)" data-toggle="pill" id="Overview" (click)="ApplyCss($event)">Overview</a>
+            </li>
+            <li *ngIf="!withdrawStatus" [ngClass]="{'active': tabActive === 'Deposit' }">
+              <a href="javascript:void(0)" data-toggle="pill" id="Deposit" (click)="ApplyCss($event)">Deposit</a>
+            </li>
+            <li *ngIf="!depositStatus" [ngClass]="{'active': tabActive === 'Withdraw' }">
+              <a href="javascript:void(0)" data-toggle="pill" id="Withdraw" (click)="ApplyCss($event)">Withdraw</a>
+            </li>
+          </ul>
+        </div>
+        <div class="tab-content col-md-10 xs-ptb-10">
+          <div class="tab-pane" [ngClass]="{'active': tabActive === 'Overview' }">
+            <div class="data-box-header">
+              <div class="row">
+                <div class="col-md-9">
+                  <div class="checkbox">
+                    <label><input type="checkbox" [(ngModel)]="filterZero"> Hide 0 Balance</label>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="data-filter">
+                    <div class="data-filter-widget animated fadeInUp">
+                      <input type="text" class="input-sm form-control" placeholder="Type to search..." [(ngModel)]="filterText">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="data-box ps no-effect" [perfectScrollbar]="config" style="position: relative;height: 70vh">
+              <app-loader [IsLoading]="loading"></app-loader>
+              <table class="table cr__table animated fadeIn support-scroll-container ps">
+                <thead>
+                  <tr class="table-head">
+                    <th>Coin</th>
+                    <th>Name</th>
+                    <th>Total Balance</th>
+                    <th>On Orders</th>
+                    <th class="text-center" *ngIf="!isUserWalletBlock">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of userWalletBalances | zeroFilterPipe : filterZero | filterArrayPipe : filterText">
+                    <td class="xs-ptb-10"> {{ item.Coin }} </td>
+                    <td> {{ item.Name }} </td>
+                    <td> {{ item.TotBalance | appDynamicDigit: 8 }} </td>
+                    <td> {{ item.OnOrders | appDynamicDigit: 8 }} </td>
+                    <td class="text-center" *ngIf="!isUserWalletBlock">
+                      <button *ngIf="item.DepositStatus" class="btn btn-xs btn-success" (click)="btnDeposit(item)">
+                        <i class="fa fa-plus-circle"></i> Deposit</button>&nbsp;
+                      <span *ngIf="!item.DepositStatus" class="btn btn-xs btn-success" disabled>
+                        <i class="fa fa-plus-circle"></i> Suspend</span>&nbsp;
+                      <button class="btn btn-xs btn-danger" *ngIf="item.WithdrawStatus" (click)="btnWithdraw(item)">
+                        <i class="fa fa-minus-circle"></i> Withdraw</button>&nbsp;
+                      <span class="btn btn-xs btn-danger" *ngIf="!item.WithdrawStatus" disabled>
+                        <i class="fa fa-plus-circle"></i> Suspend </span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="tab-pane" [ngClass]="{'active': tabActive === 'Deposit' }" *ngIf="!withdrawStatus">
+            <div class="user-balance-box">
+              <div class="row xs-mt-10 ">
+                <div class="col-sm-4  col-sm-offset-1 text-center xs-pt-50">
+                  <ngx-qrcode [qrc-element-type]="elementType" [qrc-value]="value">
+                  </ngx-qrcode>
+                </div>
+                <div class="col-sm-5">
+                  <div class="form-group animated fadeInUp">
+                    <label for="address"> Select Coin : </label>
+                    <select class="form-control" [(ngModel)]="selectedDeposit" (change)="enableDeposit($event)">
+                      <option value="0" [disabled]="true">-Select Coin-</option>
+                      <option *ngFor="let data of userWalletBalances" value='{{data.CurrencyId}}'>
+                        {{data.Coin}}
+                      </option>
+                    </select>
+                  </div>
+                  <div class="form-group animated fadeInUp">
+                    <label for="address"> Coin Address </label>
+                    <input id="btcval" class="form-control" type="text" readonly="" value="value" [(ngModel)]="value"
+                      placeholder="Coin address appear here...">
+                  </div>
+                  <div class="form-group animated fadeInUp">
+                    <button onclick="document.getElementById('btcval').select(); document.execCommand('copy'); return false;"
+                      class="btn btn-md btn-success">Copy to clipboard</button>
+                  </div>
+                  <p class="text-warning xs-mt-20 animated fadeIn">
+                    <b> It might take a few minutes for the network to confirm the transaction.</b>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="tab-pane" [ngClass]="{'active': tabActive === 'Withdraw' }" *ngIf="!depositStatus">
+            <div class="user-balance-box">
+              <div class="row">
+                <div class="col-md-4 col-md-offset-2">
+                  <div class="form-group animated fadeInUp">
+                    <label for="address"> Select Coin : </label>
+                    <select class="form-control" [(ngModel)]="selectedWithdraw" (change)="enableWithdraw($event)">
+                      <option value="0" [disabled]="true">-Select Coin-</option>
+                      <option *ngFor="let data of userWalletBalances" value='{{data.CurrencyId}}'>
+                        {{data.Coin}}
+                      </option>
+                    </select>
+                  </div>
+                  <form id="withdrawForm" novalidate [formGroup]="withdrawForm" (ngSubmit)="postWithdraw(withdrawForm.valid)">
+                    <div class="form-group animated fadeInUp">
+                      <label for="address"> Address : </label>
+                      <input type="text" class="form-control" value="1" formControlName="Address" [(ngModel)]="address"
+                        placeholder="Enter Address">
+                      <div *ngIf="withdrawForm.controls['Address'].dirty && !withdrawForm.controls['Address'].valid">
+                        <span class="error-msg" *ngIf="withdrawForm.controls['Address'].hasError('required')">
+                          <strong> Address is required</strong> </span>
+                      </div>
+                    </div>
+                    <div class=" form-group animated fadeInUp">
+                      <label for="amount"> Amount : </label>
+                      <input type="text" appNumberOnly class="form-control" value="1" formControlName="Amount"
+                        [(ngModel)]="amount" placeholder="Enter Amount">
+                      <div *ngIf="withdrawForm.controls['Amount'].dirty && !withdrawForm.controls['Amount'].valid">
+                        <span class="error-msg" *ngIf="withdrawForm.controls['Amount'].hasError('required')">
+                          <strong> Amount is required.</strong> </span>
+                      </div>
+                      <span class="error-msg" *ngIf="amount > available"> <strong>You have only {{ available }} {{ coin
+                          }}</strong> </span>
+                      <span class="error-msg" *ngIf="(limit !== 0 && (amount > limit))"><strong> Enter less then limit
+                          {{
+                          limit }} {{ coin }} </strong></span>
+                    </div>
+                    <div class="form-group animated fadeInUp" *ngIf="isTwoFactorVerification">
+                      <label for="pwd">2-F Verify Code : </label>
+                      <input type="text" appNumberOnly class="form-control" placeholder="Enter pin" formControlName="TwoFactCode"
+                        [(ngModel)]="TwoFactCode" />
+                    </div>
+                    <div class="form-group animated fadeInUp">
+                      <button class="btn btn-md btn-danger xs-mt-10" [ladda]="isLoading" [disabled]='(!withdrawForm.valid || amount > available) || (limit !== 0 && (amount > limit))'>
+                        <i class="fa fa-minus-circle"></i> Withdraw
+                      </button>
+                    </div>
+                  </form>
+                </div>
+                <div class="col-md-4 xs-mb-10 text-right">
+                  <div class="available_bal">
+                    <div class="bal-amount fs animated fadeInUp" style="animation-delay: 0.1s;" *ngIf="available || available == 0">
+                      <label>Available</label>
+                      <h3 class="text-success xs-mt-0">{{ available | appDynamicDigit: 8 }}</h3>
+                    </div>
+                    <div class="bal-amount animated fadeInUp" style="animation-delay: 0.2s;" *ngIf="limit || limit == 0">
+                      <label>limits</label>
+                      <h3 class="text-danger xs-mt-0">{{ limit | appDynamicDigit: 8 }}</h3>
+                    </div>
+                    <div class="bal-amount animated fadeInUp" style="animation-delay: 0.3s;" *ngIf="fees || fees == 0">
+                      <label>Fee</label>
+                      <h3 class="text-success xs-mt-0">{{ fees }}</h3>
+                    </div>
+                    <div class="bal-amount to animated fadeInUp" style="animation-delay: 0.1s;" *ngIf="(fees || fees == 0 && amount || amount == 0) && (amount - fees >= 0)">
+                      <hr>
+                      <label>Total Amount</label>
+                      <h3 class="text-success xs-mt-0">{{ amount - fees | appDynamicDigit: 8 }}</h3>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

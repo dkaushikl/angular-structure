@@ -1,0 +1,73 @@
+<div class="row ">
+  <div class="col-md-12">
+    <div class="buy-label"> Your Open Orders
+      <div class="cr__line">
+        <div></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <div class="market-content">
+      <div class="">
+        <app-loader [IsLoading]="loading"></app-loader>
+        <div class="data-box " *ngFor="let obj of openOrderlist">
+          <div class="row xs-mb-10">
+            <div class="col-md-12">
+              <div class="buy-label"> {{ obj.Pair }}
+                <div class="cr__line">
+                  <div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="support-scroll-container table-responsive ps animated fadeIn">
+            <table class="table  cr__table order__table_scroll no-effect">
+              <thead>
+                <tr class="table-head">
+                  <th>Type</th>
+                  <th class="text-center">
+                    <span>Price ({{ obj.Pair | splitString:'/':1 }})</span>
+                  </th>
+                  <th class="text-center">
+                    <span>Amount ({{ obj.Pair | splitString:'/':0 }})</span>
+                  </th>
+                  <th class="text-center">
+                    <span>Total ({{ obj.Pair | splitString:'/':1 }})</span>
+                  </th>
+                  <th class="text-center">Date</th>
+                  <th class="text-center">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of obj.OpenOrder" [ngClass]="{'cr_success': item.OrderType == 'BUY', 'cr_danger': item.OrderType == 'SELL'}">
+                  <td class="text-center">
+                    <span [ngClass]="{'text-success': item.OrderType == 'BUY', 'text-danger': item.OrderType == 'SELL'}">{{
+                      item.OrderType }}</span>
+                  </td>
+                  <td class="text-center"> {{ item.Price | appDynamicDigit: 8 }} </td>
+                  <td class="text-center"> {{ item.Amount | appDynamicDigit: 8 }} </td>
+                  <td class="text-center"> {{ item.Total | appDynamicDigit: 8 }} </td>
+                  <td class="text-center"> {{ item.CreatedDate | appDateFormat }} </td>
+                  <td class="text-center">
+                    <a class="btn btn-xs btn-danger" href="javascript:void(0)" (click)="CancelOrder(item)">
+                      <i class="fa fa-times-circle"></i> Cancel</a>
+                  </td>
+                </tr>
+                <tr *ngIf="supportTicket?.length == 0">
+                  <td colspan="3"> No data found</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div *ngIf="openOrderlist == undefined || openOrderlist?.length == 0">
+          <p class="text-center">
+            You have no open orders.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

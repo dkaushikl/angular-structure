@@ -1,0 +1,157 @@
+<section class="login-container">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-10 col-md-offset-1">
+        <div class="login-box">
+          <div class="row">
+            <div class="col-md-5" *ngIf="!isTwoFactor && !isEmailVerify">
+              <form novalidate id="loginForm" [formGroup]="loginForm" (ngSubmit)="Login(loginForm.value,loginForm.valid)">
+                <div class="login-blog">
+                  <div class="logo logo-id text-left  xs-mtb-10">
+                    <img src="../../../assets/images/login-logo.png" alt="demo logo" />
+                  </div>
+                  <!-- <p style="text-align: center;">Login</p> -->
+                  <div class="form-group" [ngClass]="{'has-error': (isLoginSubmitted && loginForm.get('Email').hasError('required')) ||
+                    (!loginForm.get('Email').valid && loginForm.get('Email').hasError('pattern'))}">
+                    <label for="email">Email address:</label>
+                    <div class="input-group">
+                      <span class="input-group-addon">
+                        <i class="fa fa-envelope"></i>
+                      </span>
+                      <input type="text" class="form-control" id="email" name="email" formControlName="Email"
+                        placeholder="Email" pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$">
+                    </div>
+                    <!-- <span class="error-msg" *ngIf="isLoginSubmitted && loginForm.get('Email').hasError('required')"> Email is required. </span> -->
+                    <span class="error-msg" *ngIf="!loginForm.get('Email').valid && loginForm.get('Email').hasError('pattern')">
+                      Enter valid email. </span>
+                  </div>
+                  <div class="form-group " [ngClass]="{'has-error': isLoginSubmitted && loginForm.get('Password').hasError('required')}">
+                    <label for="password">Password:</label>
+                    <div class="input-group">
+                      <span class="input-group-addon">
+                        <i class="fa fa-lock"></i>
+                      </span>
+                      <input type="password" id="password" name="password" class="form-control" formControlName="Password"
+                        placeholder="Password">
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <div class="col-sm-6">
+                      <!-- Live Key : 6LciRW4UAAAAAAGS-Cga-nz48MA8WWNZu9MicOsC -->
+                      <re-captcha (captchaResponse)="HandleCorrectCaptcha($event)"
+                        site_key="{{ captchaKey }}"></re-captcha>
+                      <span class="error-msg" *ngIf="invalidCaptcha"> Invalid captcha.</span>
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <div class="col-sm-6 col-xs-12">
+                      <button [ladda]="isLoading" class="btn-login" type="submit">Login</button>
+                    </div>
+                    <div class="col-sm-6 col-xs-12">
+                      <a [routerLink]="['/account/forgotpassword']" class="forgot-link">Forgot Password?</a>
+                    </div>
+                  </div>
+                  <a [routerLink]="['/account/register']" routerLinkActive="router-link-active" class="btn-register">Create
+                    New Trading Account
+                  </a>
+                </div>
+              </form>
+            </div>
+
+            <div class="col-md-5" *ngIf="isEmailVerify">
+              <div class="login-blog">
+                <div class="logo logo-id text-left  xs-mtb-10">
+                  <img src="../../../assets/images/login-logo.png" alt="demo logo" />
+                </div>
+                <p style="text-align: center;">Email Verification</p>
+                <div class="form-group " style="margin-top:20px;">
+                  <label for="email">Email</label>
+                  <div class="input-group">
+                    <span class="input-group-addon">
+                      <i class="fa fa-envelope"></i>
+                    </span>
+                    <input type="text" class="form-control" [(ngModel)]="email" placeholder="Email" readonly>
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <div class="col-sm-6 col-xs-12">
+                    <button type="button" class="btn-login" (click)="EmailVerify()">Send Verify Email</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-5" *ngIf="isTwoFactor && !isEmailVerify">
+              <form novalidate class="form-box" [formGroup]="verifyOtpForm" (ngSubmit)="VerifyOtp(verifyOtpForm.value,verifyOtpForm.valid)">
+                <div class="login-blog">
+                  <div class="logo logo-id text-left  xs-mtb-10">
+                    <img src="../../../assets/images/login-logo.png" alt="demo logo" />
+                  </div>
+                  <!-- <p style="text-align: center;">Email Verification</p> -->
+                  <div class="form-group" [ngClass]="{'has-error': isVerifySubmitted && verifyOtpForm.get('Code').hasError('required')}">
+                    <label for="email">Email</label>
+                    <div class="input-group">
+                      <span class="input-group-addon">
+                        <i class="fa fa-lock"></i>
+                      </span>
+                      <input type="text" class="form-control" formControlName="Code" type="text" placeholder="Enter 2FA-Code" />
+                      <!-- <span class="error-msg" *ngIf="isVerifySubmitted && !(verifyOtpForm.controls.Code.valid)"> Code is required. </span> -->
+                    </div>
+                  </div>
+                
+                  <div class="form-group row">
+                    <div class="col-sm-6 col-xs-12">
+                      <button type="submit" class="btn-login" [disabled]="(!verifyOtpForm.valid)">Submit</button>
+                    </div>
+                  </div>
+                  <a href="javascript:void(0)" (click)="DisableTwoFactor()" class="btn-register">
+                    <span>Disable 2FA Authentication</span>
+                  </a>
+                </div>
+              </form>
+            </div>
+
+            <div class="col-md-7 xs-pl-15 md-pl-0">
+              <div id="myCarousel" class="carousel slide" data-ride="carousel">
+                <ol class="carousel-indicators">
+                  <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+                  <li data-target="#myCarousel" data-slide-to="1"></li>
+                  <li data-target="#myCarousel" data-slide-to="2"></li>
+                  <li data-target="#myCarousel" data-slide-to="3"></li>
+                </ol>
+                <div class="carousel-inner">
+                  <div class="item active">
+                    <img src="../../../assets/images/g1.jpg" alt="Los Angeles" style="width:100%;">
+                    <div class="carousel-caption">
+                      <h3>Mobile ready !</h3>
+                    </div>
+                  </div>
+
+                  <div class="item">
+                    <img src="../../../assets/images/g2.jpg" alt="Chicago" style="width:100%;">
+                    <div class="carousel-caption">
+                      <h3>10 technical indicators</h3>
+                    </div>
+                  </div>
+                  <div class="item">
+                    <img src="../../../assets/images/g3.jpg" alt="New york" style="width:100%;">
+                    <div class="carousel-caption">
+                      <h3>Be alerted !</h3>
+                    </div>
+                  </div>
+                  <div class="item">
+                    <img src="../../../assets/images/g4.jpg" alt="New york" style="width:100%;">
+                    <div class="carousel-caption">
+                      <h3>All news at the same place</h3>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

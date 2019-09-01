@@ -1,0 +1,188 @@
+<div class="row" id="stoplimit">
+  <div class="col-md-12">
+    <form novalidate [formGroup]="buyForm" (ngSubmit)="Buy(buyForm.value,buyForm.valid)">
+      <div class="row border-bottom ">
+        <div class="col-md-4 col-xs-6 animated fadeIn">
+          <div class="buy-label">Buy {{ mainCurrency }}
+            <div class="cr__line">
+              <div></div>
+
+            </div>
+          </div>
+        </div>
+        <div class="col-md-8 col-xs-6 text-right animated fadeIn" *ngIf="stopLimitObj.BaseValue!= null">
+          <div class="balance-label">{{ baseCurrency }} Balance :
+            <span class="balance-count p-cursor">{{ stopLimitObj.BaseValue | appDynamicDigit:8 }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="row animated flipInX">
+        <div class="col-md-4">
+          <label>Stop</label>
+        </div>
+        <div class="col-md-8">
+          <div class="input-group" [ngClass]="{'has-error': isBuySubmitted && buyForm.get('BuyStop').hasError('required')}">
+            <input type="text" formControlName="BuyStop" appEightDigit name="text" [(ngModel)]="stopLimitObj.BuyStop" placeholder="Enter Stop"
+              class="form-control" />
+            <div class="input-group-addon">{{ baseCurrency }}</div>
+            <!-- <span class="error-msg" *ngIf="isBuySubmitted && buyForm.get('BuyStop').hasError('required')"> Stop is required.
+            </span> -->
+          </div>
+        </div>
+      </div>
+      <div class="row animated flipInX">
+        <div class="col-md-4">
+          <label>Limit</label>
+        </div>
+        <div class="col-md-8">
+          <div class="input-group" [ngClass]="{'has-error': isBuySubmitted && buyForm.get('BuyLimit').hasError('required')}">
+            <input type="text" formControlName="BuyLimit" (keyup)="SetBuytotal('limit')" [(ngModel)]="stopLimitObj.BuyLimit" appEightDigit name="text"
+              placeholder="Enter Limit" class="form-control" />
+            <div class="input-group-addon">{{ baseCurrency }}</div>
+            <!-- <span class="error-msg" *ngIf="isBuySubmitted && buyForm.get('BuyLimit').hasError('required')"> Limit is required.
+            </span> -->
+          </div>
+        </div>
+      </div>
+      <div class="row animated flipInX">
+        <div class="col-md-4">
+          <label>Amount</label>
+        </div>
+        <div class="col-md-8">
+          <div class="input-group" [ngClass]="{'has-error': isBuySubmitted && buyForm.get('BuyAmount').hasError('required')}">
+            <input type="text" formControlName="BuyAmount" (keyup)="SetBuytotal('amount')" [(ngModel)]="stopLimitObj.BuyAmount" appEightDigit
+              name="text" placeholder="Enter Amount" class="form-control" />
+            <div class="input-group-addon">{{ mainCurrency }}</div>
+            <!-- <span class="error-msg" *ngIf="isBuySubmitted && buyForm.get('BuyAmount').hasError('required')"> Amount is required.
+            </span> -->
+          </div>
+        </div>
+      </div>
+      <div class="row animated flipInX">
+        <div class="col-md-4">
+          <label>Total</label>
+        </div>
+        <div class="col-md-8">
+          <div class="input-group">
+            <input type="text" formControlName="BuyTotal" disabled (keyup)="SetBuytotal('total')" [(ngModel)]="stopLimitObj.BuyTotal" appEightDigit name="text"
+              placeholder="Total" class="form-control" />
+            <div class="input-group-addon">{{ baseCurrency }}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row animated flipInX">
+        <div class="col-md-12" *ngIf="!isLogin">
+          <button type="button" class="cr__buy">
+            <span (click)="GoToUrl('login')">Login</span> or
+            <span (click)="GoToUrl('register')">Register</span> to Trade</button>
+        </div>
+        <div class="col-md-12" *ngIf="isLogin && dBtnTrade">
+          <button type="submit" class="cr__buy" style="text-transform: uppercase">
+            <span>Buy {{ mainCurrency }}</span>
+          </button>
+        </div>
+        <div class="col-md-12" *ngIf="isLogin && !dBtnTrade">
+          <button type="button" class="cr__buy disabled" style="text-transform: uppercase">
+            <span>Buy</span>
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="col-md-12 animated flipInX" style="animation-delay: 1s;">
+    <hr>
+  </div>
+  <div class="col-md-12">
+    <form novalidate [formGroup]="sellForm" (ngSubmit)="Sell(sellForm.value,sellForm.valid)">
+      <app-loader [IsLoading]="isSellLoading"></app-loader>
+      <div class="row border-bottom xs-mb-10">
+        <div class="col-md-4 col-xs-6 animated fadeIn">
+          <div class="sell-label">Sell {{ mainCurrency }}
+            <div class="cr__line">
+              <div></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-8 col-xs-6 text-right animated fadeIn" *ngIf="stopLimitObj.MainValue!= null">
+          <div class="balance-label">{{ mainCurrency }} Balance :
+            <span class="balance-count p-cursor">{{ stopLimitObj.MainValue | appDynamicDigit:8 }}</span>
+          </div>
+        </div>
+      </div>
+      <div class="row animated flipInX">
+        <div class="col-md-4">
+          <label>Stop</label>
+        </div>
+        <div class="col-md-8">
+          <div class="input-group" [ngClass]="{'has-error': isSellSubmitted && sellForm.get('SellStop').hasError('required')}">
+            <input type="text" formControlName="SellStop" appEightDigit name="text" placeholder="Enter Stop" [(ngModel)]="stopLimitObj.SellStop"
+              class="form-control" />
+            <div class="input-group-addon">{{ baseCurrency }}</div>
+            <!-- <span class="error-msg" *ngIf="isSellSubmitted && sellForm.get('SellStop').hasError('required')"> Stop is required.
+            </span> -->
+          </div>
+        </div>
+      </div>
+      <div class="row animated flipInX">
+        <div class="col-md-4">
+          <label>Limit</label>
+        </div>
+        <div class="col-md-8">
+          <div class="input-group" [ngClass]="{'has-error': isSellSubmitted && sellForm.get('SellLimit').hasError('required')}">
+            <input type="text" formControlName="SellLimit" appEightDigit name="text" placeholder="Enter Limit" (keyup)="SetSelltotal('limit')"
+              [(ngModel)]="stopLimitObj.SellLimit" class="form-control" />
+            <div class="input-group-addon">{{ baseCurrency }}</div>
+            <!-- <span class="error-msg" *ngIf="isSellSubmitted && sellForm.get('SellLimit').hasError('required')"> Limit is required.
+            </span> -->
+          </div>
+        </div>
+      </div>
+      <div class="row animated flipInX">
+        <div class="col-md-4">
+          <label>Amount</label>
+        </div>
+        <div class="col-md-8">
+          <div class="input-group" [ngClass]="{'has-error': isSellSubmitted && sellForm.get('SellAmount').hasError('required')}">
+            <input type="text" formControlName="SellAmount" appEightDigit name="text" placeholder="Enter Amount" (keyup)="SetSelltotal('amount')"
+              [(ngModel)]="stopLimitObj.SellAmount" class="form-control" />
+            <div class="input-group-addon">{{ mainCurrency }}</div>
+            <span class="error-msg" *ngIf="isSellSubmitted && sellForm.get('SellAmount').hasError('required')"> Amount is
+              required. </span>
+          </div>
+        </div>
+      </div>
+      <div class="row animated flipInX">
+        <div class="col-md-4">
+          <label>Total</label>
+        </div>
+        <div class="col-md-8">
+          <div class="input-group">
+            <input type="text" formControlName="SellTotal" appEightDigit name="text" placeholder="Total" (keyup)="SetSelltotal('total')"
+              [(ngModel)]="stopLimitObj.SellTotal" disabled class="form-control" />
+            <div class="input-group-addon">{{ baseCurrency }}</div>
+          </div>
+        </div>
+      </div>
+      <div class="row animated flipInX">
+        <div class="col-md-12" *ngIf="!isLogin">
+          <button type="button" class="cr__sell">
+            <span (click)="GoToUrl('login')">Login</span> or
+            <span (click)="GoToUrl('register')">Register</span> to Trade</button>
+        </div>
+
+        <div class="col-md-12" *ngIf="isLogin && dBtnTrade">
+          <button type="submit" class="cr__sell" style="text-transform: uppercase">
+            <span>Sell {{ mainCurrency }}</span>
+          </button>
+        </div>
+
+        <div class="col-md-12" *ngIf="isLogin && !dBtnTrade">
+          <button type="button" class="cr__sell disabled">
+            <span>Sell</span></button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

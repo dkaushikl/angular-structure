@@ -1,0 +1,91 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="market-content">
+      <div class="row ">
+        <div class="col-md-12">
+          <div class="buy-label"> Deposit history
+            <div class="cr__line">
+              <div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <app-loader [IsLoading]="loading"></app-loader>
+      <div class="data-box support-scroll-container ps" [perfectScrollbar]="config" style="position: relative;height: 40vh">
+        <div class="table-responsive xs-pr-10">
+          <table class="table cr__table no-effect xs-m-0">
+            <thead>
+              <tr class="table-head">
+                <th>Status (Confirmations)</th>
+                <th>Coin</th>
+                <th class="text-right">Amount</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of dataDepositList">
+                <td>
+                  <span class="label" [ngClass]="{'label-success': item.Status == 'CONFIRM', 'label-danger': item.Status == 'PENDING'}">{{
+                    item.Status }}</span>
+                  <br>
+                  <strong>Date: </strong> {{ item.CreatedDate | appDateFormat }}
+                  <br>
+                  <strong>Address: </strong> {{ item.Address }}
+                  <br>
+                  <strong>TxHash: </strong> {{ item.TransactionHash }}
+                </td>
+                <td style="vertical-align: top"> {{ item.Currency }} </td>
+                <td style="vertical-align: top" class="text-right"> {{ item.Amount | appDynamicDigit: 8 }} </td>
+              </tr>
+              <tr *ngIf="dataDepositList == undefined || dataDepositList?.length == 0">
+                <td></td>
+                <td colspan="8" class="not-f"> You have not made any deposits. Once you do, they will appear here. </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="row ">
+        <div class="col-md-12">
+          <div class="buy-label"> Withdrawal history
+            <div class="cr__line">
+              <div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <app-loader [IsLoading]="loading"></app-loader>
+      <div class="data-box support-scroll-container ps " [perfectScrollbar]="config" style="position: relative;max-height: 38vh">
+        <div class="table-responsive xs-pr-10">
+          <table class="table cr__table no-effect xs-m-0">
+            <thead>
+              <tr class="table-head xs-mb-5">
+                <th>Status</th>
+                <th>Coin</th>
+                <th class="text-right">Amount</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of dataWithdrawList">
+                <td>
+                  <span class="label" [ngClass]="{'label-success': item.Status == 'CONFIRM', 'label-danger': item.Status == 'PENDING'}">{{
+                    item.Status }}</span>
+                  <br>
+                  <strong>Date: </strong> {{ item.CreatedDate | appDateFormat }}
+                  <br>
+                  <strong>Address: </strong> {{ item.Address }}
+                  <br>
+                  <strong>TxHash: </strong> {{ item.TransactionHash }}
+                </td>
+                <td style="vertical-align: top"> {{ item.Currency }} </td>
+                <td style="vertical-align: top" class="text-right"> {{ item.Amount | appDynamicDigit: 8 }} </td>
+              </tr>
+              <tr *ngIf="dataWithdrawList == undefined || dataWithdrawList?.length == 0">
+                <td colspan="9"> You have not made any withdrawals. Once you do, they will appear here. </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

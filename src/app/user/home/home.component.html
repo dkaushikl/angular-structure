@@ -1,0 +1,217 @@
+<section class="head-section">
+  <div>
+    <div>
+      <div class="cr__logo">
+        <img src="../../../assets/images/logo.png" alt="logo">
+      </div>
+      <ul class="cr__graph__list">
+        <li [ngClass]="{'active': item.Name === selectedRow}" class="animated flipInX" *ngFor="let item of selectMarket" [ngClass]="{'active': selectedItem == item.Id}">
+          <div class="cr__coin">
+            <!-- <i class="cc-BTC-alt coin-light-color"></i> -->
+          </div>
+          
+          <div class="cr__details" (click)="GetRowDetail(item)">
+            <label>{{ item.Name }}</label>
+            <span>{{ item.ChangePer | appDynamicDigit: 2 }}%</span>
+          </div>
+          <div class="cr__close">
+            <a class="" href="javascript:void(0);" (click)="removeByKey(item)">
+              <img src="../../../assets/images/ic_svg/close.svg">
+            </a>
+          </div>
+        </li>
+      </ul>
+      <div class="cr__more__list">
+        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">
+          <img src="./assets/images/ic_svg/plus.svg">
+        </a>
+        <ul class="dropdown-menu animated fadeIn" role="menu">
+          
+          <li class="animated flipInX" *ngFor="let item of headerMarket" (click)="createArray(item)">
+            <div class="cr__coin">
+              <!-- <i class="cc-BTC-alt coin-light-color"></i> -->
+            </div>
+            <div class="cr__details">
+              <label>{{ item.Name }}</label>
+              <span>{{ item.ChangePer | appDynamicDigit: 2 }}%</span>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="cr__wallet">
+      </div>
+      <div class="cr__account">
+        <a href="javascript:void(0);" class="cr__user_menu">
+          <img class="img-circle" src="{{ avtarImg }}" src="../../../assets/images/user.png">
+        </a>
+
+      </div>
+    </div>
+  </div>
+</section>
+<section class="cr__page__content">
+  <nav class="cr__left__pan">
+    <ul>
+      <li class="animated" [routerLink]="['/user/market']" routerLinkActive="active">
+        <a>
+          <img src="../../../assets/images/ic_svg/board.svg">
+          <div>Home</div>
+        </a>
+      </li>
+      <li class="animated">
+        <a class="cr__market_menu">
+          <img src="../../../assets/images/ic_svg/market.svg">
+          <div>market</div>
+        </a>
+      </li>
+      <li class="animated">
+        <a class="animated" [routerLink]="['/user/balance']" routerLinkActive="active">
+          <img src="../../../assets/images/ic_svg/balance.svg">
+          <div>Balance</div>
+        </a>
+      </li>
+      <li class="animated">
+        <a class="animated" [routerLink]="['/user/balancehistory']" routerLinkActive="active">
+          <img src="../../../assets/images/ic_svg/balance.svg">
+          <div>Balance History</div>
+        </a>
+      </li>
+      <li class="animated">
+        <a class="animated" [routerLink]="['/user/openorder']" routerLinkActive="active">
+          <img src="../../../assets/images/ic_svg/balance.svg">
+          <div>Open Order</div>
+        </a>
+      </li>
+      <li class="animated">
+        <a class="animated" [routerLink]="['/user/tradehistory']" routerLinkActive="active">
+          <img src="../../../assets/images/ic_svg/balance.svg">
+          <div>Trade History</div>
+        </a>
+      </li>
+      <li class="animated">
+        <a [routerLink]="['/user/support']" routerLinkActive="active">
+          <img src="../../../assets/images/ic_svg/order.svg">
+          <div>Support</div>
+        </a>
+      </li>
+
+    </ul>
+  </nav>
+  <section class="cr__user animated slideInRight hide">
+    <div class="cr__close">
+      <a class="cr__close_user profile" href="javascript:void(0);">
+        <img src="../../../assets/images/ic_svg/close.svg">
+      </a>
+    </div>
+    <header>
+      <div class="cr__user_md">
+        <div class="cr__line_user">
+          <div></div>
+        </div>
+        <div class="row">
+          <div class="col-md-8">
+            <div class="media xs-m-0">
+              <div class="media-left">
+                <img class="img-circle" src="{{ avtarImg }}" width="80" height="80">
+              </div>
+              <div class="media-body xs-pt-20">
+                <h4 class="media-heading">{{ fullName }}</h4>
+                <p>{{ email }}
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <br />
+            <button type="button" class="btn-theme btn-md pull-right" (click)="Logout()">
+              <i class="fa fa-sign-out"></i> Logout
+            </button>
+          </div>
+        </div>
+      </div>
+      <section class="cr__user_pic_s">
+
+      </section>
+    </header>
+    <ul class="nav nav-tabs">
+      <li class="active">
+        <a data-toggle="tab" href="#profile">Profile</a>
+      </li>
+      <li>
+        <a data-toggle="tab" href="#two__fa">Security</a>
+      </li>
+      <li>
+        <a data-toggle="tab" href="#setting">Account Setting</a>
+      </li>
+    </ul>
+    <div class="tab-content cr__user_data">
+      <div id="profile" class="tab-pane fade in active">
+        <app-profile (avtarEvent)="receiveAvtar($event)"></app-profile>
+      </div>
+      <div id="two__fa" class="tab-pane fade">
+        <app-two-factor></app-two-factor>
+      </div>
+      <div id="setting" class="tab-pane fade twofa ">
+        <app-changepassword></app-changepassword>
+      </div>
+    </div>
+  </section>
+
+  <section class="cr__market hide animated slideInLeft">
+    <div class="cr__market_sub">
+      <div class="cr__close">
+        <a class="cr__close_market" href="javascript:void(0);">
+          <img src="../../../assets/images/ic_svg/close.svg">
+        </a>
+      </div>
+      <div class="row">
+        <div class="col-md-6 col-xs-6">
+          <div class="buy-label">Market
+            <div class="cr__line">
+              <div></div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="table-responsive cr__table  xs-mt-10">
+        <app-loader [IsLoading]="loading"></app-loader>
+        <table class="table market">
+          <thead>
+            <tr class="table-head">
+              <th class="text-left">Pair</th>
+              <th class="text-center">Price</th>
+              <th class="text-right">Change</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of dataList" (click)="GetRowDetail(item)" class="cr_success" [ngClass]="{'bg-row': item.Name === selectedRow}">
+              <td>{{ item.Name }}</td>
+              <td>{{ item.LastPrice | appDynamicDigit: 8 }}</td>
+              <td appColor [attr.value]="item.ChangePer">{{ item.ChangePer | appDynamicDigit: 2 }}%</td>
+            </tr>
+            <tr *ngIf="dataList?.length == 0">
+              <td colspan="3"> No data found</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+  <section class="{{ clsSection }}">
+    <div *ngIf="this.clsSection == 'cr__inner_content'">
+      <router-outlet></router-outlet>
+    </div>
+    <div *ngIf="this.clsSection == 'cr__dashboard'">
+      <app-chart [pairId]="pairId"></app-chart>
+      <app-orders [baseCurrency]="baseCurrency" [mainCurrency]="mainCurrency" [pairId]="pairId"></app-orders>
+    </div>
+  </section>
+
+  <section class="cr__right__pan">
+    <app-exchange [pairId]="pairId" [baseCurrency]="baseCurrency" [mainCurrency]="mainCurrency" [orderType]="orderType"
+      [price]="price" [amount]="amount" [total]="total" [buyModel]="buyModel" [sellModel]="sellModel"></app-exchange>
+  </section>
+</section>

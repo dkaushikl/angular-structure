@@ -1,0 +1,314 @@
+.login-container {
+    min-height: 100vh;
+    display: block;
+    height: 100%;
+    background: #f5f7fa;
+    background-image: url(../images/circle.svg);
+    background-repeat: no-repeat;
+    background-position: calc(50% - 350px) center;
+    background-size: 700px auto;
+    align-items: center;
+}
+
+.register-container {
+    min-height: 100vh;
+    background-image: url(../images/banner.png);
+    background-size: cover;
+    background-attachment: fixed;
+    padding-bottom: 148px;
+}
+
+.login-box {
+    margin: 0 auto;
+    transform: translate(0%, 25%);
+    max-width: 100%;
+    background: #fff;
+    box-shadow: 0px 10px 50px 0px rgba(33, 4, 4, 0.23);
+    border-radius: 6px;
+}
+
+.register-box {
+    margin: 0 auto;
+    transform: translate(0%, 10%);
+    max-width: 100%;
+    background: #fff;
+    box-shadow: 0px 10px 50px 0px rgba(33, 4, 4, 0.23);
+    border-radius: 6px;
+}
+
+.login-blog {
+    padding: 18px 8%;
+}
+
+.register-blog {
+    padding: 40px 60px;
+    overflow: hidden;
+    position: relative;
+    background-color: #fff;
+}
+
+.login-head {
+    color: #5d5d5d;
+    text-align: center;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: 26px;
+    margin-top: 10px;
+}
+
+.login-blog h3 {
+    color: #ffffff;
+    text-align: center;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    font-weight: 700;
+    background: -webkit-linear-gradient(left, #0c63ff, #10e0e8);
+    background: -moz-linear-gradient(left, #0c63ff, #10e0e8);
+    background: -ms-linear-gradient(left, #0c63ff, #10e0e8);
+    background: -o-linear-gradient(left, #0c63ff, #10e0e8);
+    font-size: 13px;
+    display: inline;
+    padding: 6px 8px;
+    position: absolute;
+    top: -42px;
+    left: -53px;
+    transform: rotate(-45deg);
+    border-radius: 4px 0 4px 0;
+    height: 86px;
+    padding-top: 60px;
+    width: 150px;
+}
+
+.carousel-indicators .active {
+    width: 30px;
+    height: 6px;
+    margin: 0;
+    background-color: #fff;
+    background: -webkit-linear-gradient(left, #004fda 0, #0aa2d9 100%);
+}
+
+.carousel-indicators {
+    left: 24%;
+}
+
+.carousel-inner img {
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+}
+
+.carousel-caption {
+    left: 11%;
+}
+
+.carousel-caption h3 {
+    text-shadow: none;
+    color: #fff;
+    text-align: left;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+.carousel-indicators li {
+    display: inline-block;
+    width: 30px;
+    height: 6px;
+    margin: 1px;
+    text-indent: -999px;
+    cursor: pointer;
+    background-color: rgb(245, 247, 250);
+    border: 0;
+    border-radius: 10px;
+}
+
+.login-blog label {
+    color: #545a65;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.login-blog .form-control {
+    background-color: #ffffff;
+    padding: 20px 15px;
+    box-shadow: none;
+    border: 1px solid #e1e3e6;
+    box-sizing: border-box;
+}
+
+.login-blog ::-webkit-input-placeholder {
+    color: #b0bbc7;
+}
+
+.login-blog ::-moz-placeholder {
+    color: #b0bbc7;
+}
+
+.login-blog :-ms-input-placeholder {
+    color: #b0bbc7;
+}
+
+.login-blog :-moz-placeholder {
+    color: #b0bbc7;
+}
+
+.btn-login {
+    background: -webkit-linear-gradient(left, #004fda 0, #00d0d8 50%, #004eda 100%);
+    background-size: 300%, 1px;
+    background-position: 0 0;
+    border: 0;
+    padding: 10px 35%;
+    color: #fff;
+    border-radius: 4px;
+    margin: 15px 0;
+    text-transform: capitalize;
+    font-size: 15px;
+    font-weight: 600;
+    -o-transition: all 400ms;
+    -moz-transition: all 400ms;
+    transition: all 400ms;
+    -webkit-transition: all 400ms;
+    box-shadow: 0px 5px 15px 0px rgba(0, 126, 255, 0.32);
+    display: inline-block;  
+    position: relative;
+}
+
+.btn-login:hover {
+    color: #fff;
+    text-decoration: none;
+    background-position: 100% !important;
+}
+
+.btn-register {
+    background: -webkit-linear-gradient(left, #1f6aef 0, #d800bd 50%, #1764ec 100%);
+    background-size: 300%, 1px;
+    background-position: 0 0;
+    border: 0;
+    padding: 11px 8%;
+    width: 100%;
+    color: #fff;
+    border-radius: 4px;
+    font-size: 15px;
+    text-transform: capitalize;
+    font-weight: 600;
+    -o-transition: all 400ms;
+    -moz-transition: all 400ms;
+    transition: all 400ms;
+    -webkit-transition: all 400ms;
+    box-shadow: 0px 5px 15px 0px rgba(0, 112, 255, 0.32);
+    position: relative;
+}
+
+.btn-register:hover {
+    color: #fff;
+    text-decoration: none;
+    background-position: 100% !important;
+}
+
+.forgot-link {
+    color: #545a65;
+    margin: 26px 0px;
+    display: block;
+    font-weight: 600;
+    text-align: right;
+}
+
+.ln-ref {
+    color: #545a65;
+    font-weight: 600;
+    text-align: left;
+    margin-bottom: 20px;
+    display: block;
+    font-size: 14px;
+}
+
+.ln-ref a {
+    color: #0089ff;
+    font-weight: 800;
+    cursor: pointer;
+    letter-spacing: 0.5px;
+}
+
+.login-box .input-group-addon,
+.register-box .input-group-addon {
+    padding: 6px 12px;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1;
+    color: #4786fc !important;
+    text-align: center;
+    background-color: #ecf2f9 !important;
+    border: 1px solid #e0e7f1 !important;
+    border-right: 0 !important;
+    border-radius: 4px;
+    min-width: 45px;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.register-blog h3 {
+    color: #ffffff;
+    text-align: center;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    font-weight: 700;
+    background: #01579B;
+    background: -webkit-linear-gradient(left, #01579B, #398bf7);
+    background: -o-linear-gradient(bott, #01579B, #398bf7);
+    background: -moz-linear-gradient(right, #01579B, #398bf7);
+    background: linear-gradient(to right, #01579B, #398bf7);
+    font-size: 13px;
+    display: inline;
+    padding: 6px 8px;
+    position: absolute;
+    top: -42px;
+    left: -53px;
+    transform: rotate(-45deg);
+    border-radius: 4px 0 4px 0;
+    height: 86px;
+    padding-top: 60px;
+    width: 150px;
+}
+
+.register-blog label {
+    color: #4b6076;
+}
+
+.register-blog ::-webkit-input-placeholder {
+    color: #b0bbc7;
+}
+
+.register-blog ::-moz-placeholder {
+    color: #b0bbc7;
+}
+
+.register-blog :-ms-input-placeholder {
+    color: #b0bbc7;
+}
+
+.register-blog :-moz-placeholder {
+    color: #b0bbc7;
+}
+
+@media (max-width: 768px) {
+    .login-blog {
+        background-color: #fff;
+        padding: 18px 8%;
+        margin: 20px 20px;
+        border-radius: 6px;
+    }
+    .register-blog {
+        background-color: #fff;
+        padding: 18px 8%;
+        margin: 20px 20px;
+        border-radius: 6px;
+    }
+    .btn-login {
+        width: 100%;
+    }
+    .forgot-link {
+        margin: 6px 0px;
+    }
+    .logo-id {
+        position: relative !important;
+    }
+}

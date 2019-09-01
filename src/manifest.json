@@ -1,0 +1,57 @@
+{
+  "name": "demo",
+  "short_name": "demo",
+  "description": "meet first cryptocurrency that change your life.",
+  "lang": "en-US",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
+  "dir": "ltr",
+  "scope": "/",
+  "orientation": "any",
+  "related_applications": [],
+  "prefer_related_applications": false,
+  "icons": [
+    {
+      "src": "assets/favicon/android-chrome-36x36.png",
+      "sizes": "36x36",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/favicon/android-chrome-48x48.png",
+      "sizes": "48x48",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/favicon/android-chrome-72x72.png",
+      "sizes": "72x72",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/favicon/android-chrome-96x96.png",
+      "sizes": "96x96",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/favicon/android-chrome-144x144.png",
+      "sizes": "144x144",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/favicon/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/favicon/android-chrome-256x256.png",
+      "sizes": "256x256",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/favicon/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
